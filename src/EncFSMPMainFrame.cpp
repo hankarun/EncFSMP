@@ -40,6 +40,7 @@
 #include <wx/dirdlg.h>
 #include <wx/busyinfo.h>
 #include <wx/config.h>
+#include <wx/display.h>
 
 #if defined(__WXMAC__) || defined(__WXOSX__) || defined(__WXOSX_COCOA__)
 #	include "osx/MacMenuWorkaroundBridge.h"
@@ -1305,6 +1306,13 @@ void EncFSMPMainFrame::loadWindowLayoutFromConfig()
 		istr >> pt.x >> pt.y >> sz.x >> sz.y;
 		SetSize(sz);
 		SetPosition(pt);
+		int display = wxDisplay::GetFromWindow(this);
+		if (display == wxNOT_FOUND)
+		{
+			pt.x = 0;
+			pt.y = 0;
+			SetPosition(pt);
+		}
 	}
 	if(config->Read(EncFSMPStrings::configColumnWidths_, &columnWidths))
 	{
